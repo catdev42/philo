@@ -1,0 +1,9 @@
+so each chopstick will have a mutex?
+
+and each philo is a thread?
+
+
+Necessary for mutex:
+    *Initialize the struct iwth mutex
+    *have a free functon for the struct
+    *
