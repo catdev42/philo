@@ -7,3 +7,10 @@ Necessary for mutex:
     *Initialize the struct iwth mutex
     *have a free functon for the struct
     *
+
+
+    // /*****ACTIONS_C TEMP ******/
+// void					*phil_eating(void *phil_num);
+// void					*phil_thinking(void *phil_num);
+// void					*phil_sleeping(void *phil_num);
+// void					*phil_dead(void *phil_num);

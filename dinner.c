@@ -25,7 +25,10 @@ void	dinner_start(t_table *table)
 	while (++i < table->philo_nbr)
 		handle_thread_error(pthread_join(table->philos[i].thread_id, NULL),
 			JOIN, table);
+	handle_thread_error(pthread_join(table->monitor, NULL), JOIN, table);
+	set_bool(&table->table_mutex, &table->end_simulation, true, table);
 }
+
 /* THE PROGRAM OF EACH PHILOSOPHER*/
 void	*dinner_simulation(void *data)
 {
@@ -33,8 +36,9 @@ void	*dinner_simulation(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
+	philo->last_meal_time = get_time();
 	pthread_mutex_lock(&philo->table->table_mutex);
-	philo->table->active_threads++;
+	philo->table->active_threads += 1;
 	pthread_mutex_unlock(&philo->table->table_mutex);
 	if (philo->id % 2 == 0)
 		precise_usleep(philo->table->time_to_eat / 2, philo->table);
@@ -42,12 +46,8 @@ void	*dinner_simulation(void *data)
 	{
 		if (philo->full)
 			return (NULL);
-		if (sim_finished(philo->table))
-			return (NULL);
 		eat(philo);
 		philo_sleep(philo);
-		if (sim_finished(philo->table))
-			return (NULL);
 		philo_think(philo);
 	}
 	return (NULL);

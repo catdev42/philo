@@ -5,7 +5,8 @@ SRC		= dinner.c error_exit.c main.c minilib.c parse_init.c safe_fun.c set_get.c 
 OBJS	= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 CC 		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g 
+CFLAGS	= -Wall -Wextra -Werror
+
 LDFLAGS = -pthread
 
 

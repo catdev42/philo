@@ -49,6 +49,7 @@ int	data_init(t_table *table)
 
 	i = 0;
 	table->end_simulation = false;
+	table->active_threads = 0;
 	table->philos = (t_philo *)safe_calloc(table->philo_nbr + 1,
 			sizeof(t_philo), table);
 	table->forks = (t_fork *)safe_calloc(table->philo_nbr + 1, sizeof(t_fork),

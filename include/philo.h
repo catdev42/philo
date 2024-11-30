@@ -157,7 +157,7 @@ void					set_bool(t_mtx *mutex, bool *item, bool value,
 bool					get_bool(t_mtx *mutex, bool *item, t_table *table);
 void					set_long(t_mtx *mutex, long *item, long value,
 							t_table *table);
-bool					get_long(t_mtx *mutex, long *item, t_table *table);
+long					get_long(t_mtx *mutex, long *item, t_table *table);
 bool					sim_finished(t_table *table);
 
 /********************/
@@ -166,9 +166,3 @@ bool					sim_finished(t_table *table);
 void					precise_usleep(long milsec, t_table *table);
 
 #endif
-
-// /*****ACTIONS_C TEMP ******/
-// void					*phil_eating(void *phil_num);
-// void					*phil_thinking(void *phil_num);
-// void					*phil_sleeping(void *phil_num);
-// void					*phil_dead(void *phil_num);
