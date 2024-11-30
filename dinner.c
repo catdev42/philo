@@ -76,7 +76,7 @@ void	eat(t_philo *philo)
 void	philo_sleep(t_philo *philo)
 {
 	write_status(philo, SLEEPING);
-	precise_usleep(philo->table->time_to_sleep, philo->table);
+	precise_usleep(philo->table->time_to_sleep - 1, philo->table);
 }
 void	philo_think(t_philo *philo)
 {
