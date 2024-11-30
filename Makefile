@@ -1,7 +1,7 @@
 NAME 	= philo
 
 OBJDIR		:= ./obj
-SRC		= main.c actions.c minilib.c
+SRC		= dinner.c error_exit.c main.c minilib.c parse_init.c safe_fun.c set_get.c utils.c monitor.c
 OBJS	= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 CC 		= gcc

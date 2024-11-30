@@ -6,11 +6,11 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 21:40:59 by myakoven          #+#    #+#             */
-/*   Updated: 2024/11/22 03:53:20 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/11/28 05:10:41 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "./include/philo.h"
 
 /* Returns 0 on error */
 uint64_t	get_time(void)
