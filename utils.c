@@ -25,7 +25,19 @@ void	precise_usleep(long milsec_long, t_table *table)
 			usleep(milsec / 10);
 		else
 			while (get_time() - start < milsec)
-				;
+				usleep(500);
 	}
 	return ;
+}
+
+void	ft_freetab(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }

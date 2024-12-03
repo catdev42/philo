@@ -164,5 +164,5 @@ bool					sim_finished(t_table *table);
 /***    UTILS.C   ***/
 /********************/
 void					precise_usleep(long milsec, t_table *table);
-
+void					ft_freetab(char **arr);
 #endif

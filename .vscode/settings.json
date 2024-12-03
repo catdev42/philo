@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "philo.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "__locale": "c"
     }
 }

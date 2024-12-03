@@ -25,8 +25,8 @@ void	dinner_start(t_table *table)
 	while (++i < table->philo_nbr)
 		handle_thread_error(pthread_join(table->philos[i].thread_id, NULL),
 			JOIN, table);
-	handle_thread_error(pthread_join(table->monitor, NULL), JOIN, table);
 	set_bool(&table->table_mutex, &table->end_simulation, true, table);
+	handle_thread_error(pthread_join(table->monitor, NULL), JOIN, table);
 }
 
 /* THE PROGRAM OF EACH PHILOSOPHER*/
@@ -36,7 +36,9 @@ void	*dinner_simulation(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
-	philo->last_meal_time = get_time();
+	// philo->last_meal_time = get_time();
+	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
+		philo->table);
 	pthread_mutex_lock(&philo->table->table_mutex);
 	philo->table->active_threads += 1;
 	pthread_mutex_unlock(&philo->table->table_mutex);
@@ -55,32 +57,36 @@ void	*dinner_simulation(void *data)
 
 void	eat(t_philo *philo)
 {
-	// get forks
+	long	drift;
+
+	drift = 0;
 	safe_mutex_call(&philo->first_fork->fork, LOCK, philo->table);
 	write_status(philo, TAKE_FIRST_FORK);
 	safe_mutex_call(&philo->second_fork->fork, LOCK, philo->table);
 	write_status(philo, TAKE_SECOND_FORK);
-	// set last meal time (race conditions with checker so must lock)
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
 		philo->table);
 	write_status(philo, EATING);
 	philo->meals_counter++;
-	precise_usleep(philo->table->time_to_eat, philo->table);
-	if (philo->meals_counter == philo->table->nbr_limit_meals)
-		set_bool(&philo->philo_mutex, &philo->full, true, philo->table);
-	// unlock and release forks
+	drift = (get_time() - philo->table->start_simulation)
+		% philo->table->time_to_eat;
+	precise_usleep(philo->table->time_to_eat - drift, philo->table);
 	safe_mutex_call(&philo->first_fork->fork, UNLOCK, philo->table);
 	safe_mutex_call(&philo->second_fork->fork, UNLOCK, philo->table);
+	if (philo->meals_counter == philo->table->nbr_limit_meals)
+		set_bool(&philo->philo_mutex, &philo->full, true, philo->table);
 }
 
 void	philo_sleep(t_philo *philo)
 {
 	write_status(philo, SLEEPING);
-	precise_usleep(philo->table->time_to_sleep - 1, philo->table);
+	precise_usleep(philo->table->time_to_sleep, philo->table);
 }
 void	philo_think(t_philo *philo)
 {
 	write_status(philo, THINKING);
+	precise_usleep(philo->table->time_to_die - philo->table->time_to_sleep
+		- philo->table->time_to_eat, philo->table);
 }
 
 void	wait_all_threads(t_table *table)
