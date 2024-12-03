@@ -119,9 +119,6 @@ int						parse_argv(t_table *table, char **argv);
 int						ft_strisnumeric(char *str);
 
 /*****MINILIB_C******/
-void					ft_putchar_fd(char c, int fd);
-void					ft_putstr_fd(const char *s, int fd);
-void					ft_putnbr_fd(int n, int fd);
 void					*ft_memset(void *s, int c, size_t n);
 long					ft_atol(const char *nptr);
 void					*ft_calloc(size_t nmemb, size_t size);

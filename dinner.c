@@ -8,8 +8,6 @@ void	dinner_start(t_table *table)
 	i = -1;
 	if (table->nbr_limit_meals == 0)
 		return ;
-	else if (table->nbr_limit_meals == 1)
-		; // TODO
 	else
 		while (++i < table->philo_nbr)
 			handle_thread_error(pthread_create(&table->philos[i].thread_id,
@@ -36,7 +34,6 @@ void	*dinner_simulation(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
-	// philo->last_meal_time = get_time();
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
 		philo->table);
 	pthread_mutex_lock(&philo->table->table_mutex);
@@ -60,19 +57,27 @@ void	eat(t_philo *philo)
 	long	drift;
 
 	drift = 0;
-	safe_mutex_call(&philo->first_fork->fork, LOCK, philo->table);
-	write_status(philo, TAKE_FIRST_FORK);
-	safe_mutex_call(&philo->second_fork->fork, LOCK, philo->table);
-	write_status(philo, TAKE_SECOND_FORK);
-	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
-		philo->table);
-	write_status(philo, EATING);
-	philo->meals_counter++;
-	drift = (get_time() - philo->table->start_simulation)
-		% philo->table->time_to_eat;
-	precise_usleep(philo->table->time_to_eat - drift, philo->table);
-	safe_mutex_call(&philo->first_fork->fork, UNLOCK, philo->table);
-	safe_mutex_call(&philo->second_fork->fork, UNLOCK, philo->table);
+	if (philo->table->philo_nbr == 1)
+	{
+		write_status(philo, TAKE_FIRST_FORK);
+		precise_usleep(philo->table->time_to_die + 10, philo->table);
+	}
+	else
+	{
+		safe_mutex_call(&philo->first_fork->fork, LOCK, philo->table);
+		write_status(philo, TAKE_FIRST_FORK);
+		safe_mutex_call(&philo->second_fork->fork, LOCK, philo->table);
+		write_status(philo, TAKE_SECOND_FORK);
+		set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
+			philo->table);
+		write_status(philo, EATING);
+		philo->meals_counter++;
+		drift = (get_time() - philo->table->start_simulation)
+			% philo->table->time_to_eat;
+		precise_usleep(philo->table->time_to_eat - drift, philo->table);
+		safe_mutex_call(&philo->first_fork->fork, UNLOCK, philo->table);
+		safe_mutex_call(&philo->second_fork->fork, UNLOCK, philo->table);
+	}
 	if (philo->meals_counter == philo->table->nbr_limit_meals)
 		set_bool(&philo->philo_mutex, &philo->full, true, philo->table);
 }
@@ -95,29 +100,27 @@ void	wait_all_threads(t_table *table)
 		;
 }
 
-void	write_status(t_philo *philo, t_action action) //, bool debug
+void	write_status(t_philo *philo, t_action action)
 {
-	long elapsed;
+	long	elapsed;
 
 	if (philo->full)
 		return ;
 	elapsed = get_time() - philo->table->start_simulation;
-
 	safe_mutex_call(&philo->table->write_mutex, LOCK, philo->table);
-
 	if (!sim_finished(philo->table))
 	{
 		if (action == TAKE_FIRST_FORK || action == TAKE_SECOND_FORK)
 			printf("%ld Philo %i has taken a fork\n", elapsed, philo->id);
 		else if (action == EATING)
-			printf(BOLD_BLUE "%ld Philo %i is eating...\n" RESET, elapsed,
+			printf(BOLD_BLUE "%ld Philo %i is eating\n" RESET, elapsed,
 				philo->id);
 		else if (action == SLEEPING)
-			printf("%ld Philo %i is sleeping...\n", elapsed, philo->id);
+			printf("%ld Philo %i is sleeping\n", elapsed, philo->id);
 		else if (action == THINKING)
-			printf("%ld Philo %i is thinking...\n", elapsed, philo->id);
+			printf("%ld Philo %i is thinking\n", elapsed, philo->id);
 		else if (action == DIED)
-			printf(BOLD_RED "%ld Philo %i is DEAD...\n", elapsed, philo->id);
+			printf(BOLD_RED "%ld Philo %i died\n", elapsed, philo->id);
 	}
 	safe_mutex_call(&philo->table->write_mutex, UNLOCK, philo->table);
 }

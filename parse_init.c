@@ -88,3 +88,32 @@ void	philo_init(t_table *table)
 		i++;
 	}
 }
+
+/* Delivers a long int
+	- user must make sure the nubmer is not more or it will overflow */
+long	ft_atol(const char *nptr)
+{
+	long	num;
+	long	sign;
+
+	num = 0;
+	sign = 1;
+	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
+		nptr++;
+	if (*nptr == '-' || *nptr == '+')
+	{
+		if (*nptr == '+')
+			nptr++;
+		else if (*nptr == '-')
+		{
+			sign = -1;
+			nptr++;
+		}
+	}
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		num = num * 10 + (*nptr - 48);
+		nptr++;
+	}
+	return (num * sign);
+}
