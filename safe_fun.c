@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   safe_fun.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 03:06:29 by myakoven          #+#    #+#             */
+/*   Updated: 2024/12/04 03:06:30 by myakoven         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./include/philo.h"
 
 void	*safe_calloc(size_t nmemb, size_t size, t_table *table)
@@ -44,6 +56,7 @@ void	safe_mutex_call(t_mtx *mutex, int operation, t_table *table)
 	else
 		error_exit("Wrong operation code", 1, table);
 }
+
 void	handle_thread_error(int status, int oper, t_table *table)
 {
 	if (status == 0)

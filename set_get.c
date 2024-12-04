@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_get.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 03:06:35 by myakoven          #+#    #+#             */
+/*   Updated: 2024/12/04 03:06:36 by myakoven         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./include/philo.h"
 
 /* Slightly abstacts working with mutex,
 these will call LOCK and UNLOCK and perform error handling */
-
 void	set_bool(t_mtx *mutex, bool *item, bool value, t_table *table)
 {
 	safe_mutex_call(mutex, LOCK, table);
 	*item = value;
 	safe_mutex_call(mutex, UNLOCK, table);
 }
+
 bool	get_bool(t_mtx *mutex, bool *item, t_table *table)
 {
 	bool	ret;
@@ -25,6 +37,7 @@ void	set_long(t_mtx *mutex, long *item, long value, t_table *table)
 	*item = value;
 	safe_mutex_call(mutex, UNLOCK, table);
 }
+
 long	get_long(t_mtx *mutex, long *item, t_table *table)
 {
 	long	ret;

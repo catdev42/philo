@@ -4,7 +4,9 @@ typedef struct s_mute_chopstick
 {
 	int				num;
 	pthread_mutex_t	mutex;
-}					t_mute_chopstick;
+}					t_mute_chopstick;\
+
+
 
 void	free_mutex_chop(t_mute_chopstick *data)
 {

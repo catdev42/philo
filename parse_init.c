@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_init.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 03:06:23 by myakoven          #+#    #+#             */
+/*   Updated: 2024/12/04 03:06:25 by myakoven         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "./include/philo.h"
 
@@ -25,24 +36,6 @@ int	parse_argv(t_table *table, char **argv)
 	return (1);
 }
 
-int	ft_strisnumeric(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] && ft_isspace(str[i]))
-		i++;
-	if (str[i] == '-')
-		return (0);
-	if (str[i] == '+')
-		i++;
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-		i++;
-	if (i < ft_strlen(str))
-		return (0);
-	return (1);
-}
-
 int	data_init(t_table *table)
 {
 	int	i;
@@ -64,6 +57,7 @@ int	data_init(t_table *table)
 	}
 	return (i);
 }
+
 void	philo_init(t_table *table)
 {
 	int	i;
@@ -77,43 +71,32 @@ void	philo_init(t_table *table)
 		table->philos[i].full = false;
 		table->philos[i].meals_counter = 0;
 		table->philos[i].table = table;
-		table->philos[i].first_fork = &table->forks[(i + 1) % philo_num];
-		table->philos[i].second_fork = &table->forks[i];
+		table->philos[i].first_fork = &table->forks[i];
+		table->philos[i].second_fork = &table->forks[(i + 1) % philo_num];
 		if (table->philos[i].id % 2 == 0)
 		{
-			table->philos[i].first_fork = &table->forks[i];
-			table->philos[i].second_fork = &table->forks[(i + 1) % philo_num];
+			table->philos[i].first_fork = &table->forks[(i + 1) % philo_num];
+			table->philos[i].second_fork = &table->forks[i];
 		}
 		safe_mutex_call(&table->philos[i].philo_mutex, INIT, table);
 		i++;
 	}
 }
 
-/* Delivers a long int
-	- user must make sure the nubmer is not more or it will overflow */
-long	ft_atol(const char *nptr)
+int	ft_strisnumeric(char *str)
 {
-	long	num;
-	long	sign;
+	size_t	i;
 
-	num = 0;
-	sign = 1;
-	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
-		nptr++;
-	if (*nptr == '-' || *nptr == '+')
-	{
-		if (*nptr == '+')
-			nptr++;
-		else if (*nptr == '-')
-		{
-			sign = -1;
-			nptr++;
-		}
-	}
-	while (*nptr >= '0' && *nptr <= '9')
-	{
-		num = num * 10 + (*nptr - 48);
-		nptr++;
-	}
-	return (num * sign);
+	i = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	if (str[i] == '-')
+		return (0);
+	if (str[i] == '+')
+		i++;
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+		i++;
+	if (i < ft_strlen(str))
+		return (0);
+	return (1);
 }

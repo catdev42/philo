@@ -91,25 +91,19 @@ typedef enum e_action
 	DIED,
 }						t_action;
 
-uint64_t				get_time(void);
-
 /*** MAIN ***/
 void					wait_all_threads(t_table *table);
+void					*monitor_thread(void *data);
 
 /********************/
 /***    DINNER.C   ***/
 /********************/
 void					dinner_start(t_table *table);
-/* THE PROGRAM OF EACH PHILOSOPHER*/
-void					*dinner_simulation(void *data);
+void					*dinner_each_philo(void *data);
 void					eat(t_philo *philo);
-void					philo_think(t_philo *philo);
-void					wait_all_threads(t_table *table);
-// time_ms philo_id action
-void					write_status(t_philo *philo, t_action action);
 void					philo_sleep(t_philo *philo);
 void					philo_think(t_philo *philo);
-void					*monitor_dinner(void *data);
+
 /********************/
 /***   PARSE_INIT ***/
 /********************/
@@ -161,5 +155,7 @@ bool					sim_finished(t_table *table);
 /***    UTILS.C   ***/
 /********************/
 void					precise_usleep(long milsec, t_table *table);
-void					ft_freetab(char **arr);
+uint64_t				get_time(void);
+void					wait_all_threads(t_table *table);
+void					write_status(t_philo *philo, t_action action);
 #endif
