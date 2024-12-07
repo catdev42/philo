@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:07:06 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 17:12:58 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/04 03:07:07 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	error_exit(const char *error, int error_num, t_table *table)
 	clean(table);
 	if (error)
 		printf(RED "%s" RESET, error);
-		
 	exit(error_num);
 }
 

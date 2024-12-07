@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:54 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 17:14:13 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:58:33 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	main(int argc, char **argv)
 
 void	*monitor_thread(void *data)
 {
-	t_table		*tab;
-	uint64_t	current_time;
-	int			i;
-	long		active_threads;
+	t_table *tab;
+	uint64_t current_time;
+	int i;
+	long active_threads;
 
 	i = 0;
 	tab = (t_table *)data;
