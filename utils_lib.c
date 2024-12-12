@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:40 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/04 03:06:41 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:23:04 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,10 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-
-
 void	ft_bzero(void *s, size_t n)
 {
-	size_t i;
-	unsigned char *p;
+	size_t			i;
+	unsigned char	*p;
 
 	p = (unsigned char *)s;
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:58 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/04 03:06:59 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:24:32 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	dinner_start(t_table *table)
 	int	i;
 
 	i = -1;
-	if (table->nbr_limit_meals == 0)
+	if (table->meals_limit_num == 0)
 		return ;
 	else
-		while (++i < table->philo_nbr)
+		while (++i < table->philo_num)
 			handle_thread_error(pthread_create(&table->philos[i].thread_id,
 					NULL, dinner_each_philo, (void *)&table->philos[i]), CREATE,
 				table);
@@ -31,7 +31,7 @@ void	dinner_start(t_table *table)
 		error_exit("Problem with gettimeofday()", 1, table);
 	set_bool(&table->table_mutex, &table->all_threads_ready, true, table);
 	i = -1;
-	while (++i < table->philo_nbr)
+	while (++i < table->philo_num)
 		handle_thread_error(pthread_join(table->philos[i].thread_id, NULL),
 			JOIN, table);
 	set_bool(&table->table_mutex, &table->end_simulation, true, table);
@@ -68,7 +68,7 @@ void	*dinner_each_philo(void *data)
 
 void	eat(t_philo *philo)
 {
-	if (philo->table->philo_nbr == 1)
+	if (philo->table->philo_num == 1)
 	{
 		write_status(philo, TAKE_FIRST_FORK);
 		while (!sim_finished(philo->table))
@@ -88,7 +88,7 @@ void	eat(t_philo *philo)
 		safe_mutex_call(&philo->first_fork->fork, UNLOCK, philo->table);
 		safe_mutex_call(&philo->second_fork->fork, UNLOCK, philo->table);
 	}
-	if (philo->meals_counter == philo->table->nbr_limit_meals)
+	if (philo->meals_counter == philo->table->meals_limit_num)
 		set_bool(&philo->philo_mutex, &philo->full, true, philo->table);
 }
 
@@ -104,7 +104,7 @@ void	philo_think(t_philo *philo)
 
 	think1 = 0;
 	think2 = 0;
-	if (philo->table->philo_nbr % 2)
+	if (philo->table->philo_num % 2)
 	{
 		think1 = philo->table->time_to_die - philo->table->time_to_sleep
 			- philo->table->time_to_eat;

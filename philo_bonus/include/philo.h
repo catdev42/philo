@@ -60,16 +60,18 @@ typedef struct s_philo
 	pthread_t			thread_id;
 	t_table				*table;
 	t_mtx				philo_mutex;
+
+	char** sem_names;
 }						t_philo;
 
 /***TABLE****/
 struct					s_table
 {
-	long				philo_nbr;
+	long				philo_num;
 	long				time_to_die;
 	long				time_to_eat;
 	long				time_to_sleep;
-	long				nbr_limit_meals;
+	long				meals_limit_num;
 	//-1 means no input
 	long				start_simulation;
 	long				active_threads;

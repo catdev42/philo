@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 20:26:17 by myakoven          #+#    #+#             */
+/*   Updated: 2024/12/12 20:26:19 by myakoven         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
@@ -62,21 +73,23 @@ typedef struct s_philo
 	t_mtx				philo_mutex;
 }						t_philo;
 
-/***TABLE****/
+/***TABLE****
+ nbr_of_meals initi to -1 means no number of meals given == unlimited*/
 struct					s_table
 {
-	long				philo_nbr;
+	long				philo_num;
 	long				time_to_die;
 	long				time_to_eat;
 	long				time_to_sleep;
-	long				nbr_limit_meals;
-	//-1 means no input
+	long				meals_limit_num;
 	long				start_simulation;
 	long				active_threads;
 	bool				end_simulation;
 	bool				all_threads_ready;
 	t_mtx				table_mutex;
 	t_mtx				write_mutex;
+	int					mut_inited;
+	int					fork_mut_inited;
 	pthread_t			monitor;
 
 	t_fork				*forks;

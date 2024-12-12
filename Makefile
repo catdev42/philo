@@ -7,7 +7,8 @@ OBJS	= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -Werror -g3
 
-LDFLAGS = -pthread
+LDFLAGS = -pthread -fsanitize=thread
+
 
 
 all: $(NAME)

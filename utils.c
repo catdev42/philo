@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:45 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 17:16:34 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:22:54 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ uint64_t	get_time(void)
 /* PRECISE USLEEP */
 void	precise_usleep(long milsec_long, t_table *table)
 {
-	// long usec;
-	uint64_t milsec = (uint64_t)milsec_long;
-	uint64_t start;
+	uint64_t	milsec;
+	uint64_t	start;
+
+	milsec = (uint64_t)milsec_long;
 	start = get_time();
 	while (get_time() - start < milsec)
 	{
@@ -41,7 +42,6 @@ void	precise_usleep(long milsec_long, t_table *table)
 	}
 	return ;
 }
-
 
 void	wait_all_threads(t_table *table)
 {
@@ -102,5 +102,3 @@ long	ft_atol(const char *nptr)
 	}
 	return (num * sign);
 }
-
-

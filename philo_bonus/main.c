@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:54 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 15:58:33 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:24:16 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	main(int argc, char **argv)
 		error_exit("Wrong input!\n" GREEN "DO: /philo 4 400 200 200 4", 1,
 			&table);
 	parse_argv(&table, argv);
+	if (table.philo_num > 1024)
+		error_exit(YELLOW "Too many philos", 1, &table);
 	data_init(&table);
 	philo_init(&table);
 	dinner_start(&table);
@@ -30,20 +32,20 @@ int	main(int argc, char **argv)
 
 void	*monitor_thread(void *data)
 {
-	t_table *tab;
-	uint64_t current_time;
-	int i;
-	long active_threads;
+	t_table		*tab;
+	uint64_t	current_time;
+	int			i;
+	long		active_threads;
 
 	i = 0;
 	tab = (t_table *)data;
 	active_threads = 0;
-	while (active_threads < tab->philo_nbr)
+	while (active_threads < tab->philo_num)
 		active_threads = get_long(&tab->table_mutex, &tab->active_threads, tab);
 	while (!sim_finished(tab))
 	{
 		i = 0;
-		while (i < tab->philo_nbr && !sim_finished(tab))
+		while (i < tab->philo_num && !sim_finished(tab))
 		{
 			current_time = get_time();
 			if (!tab->philos[i].full && current_time

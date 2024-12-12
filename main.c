@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:54 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 17:14:13 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:24:16 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,18 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
+static int	is_still_alive(t_table *table, uint64_t current_time, int i)
+{
+	long	last_meal_time;
+
+	last_meal_time = get_long(&table->philos[i].philo_mutex,
+			&table->philos[i].last_meal_time, table);
+	if ((current_time - (uint64_t)last_meal_time) > (uint64_t)table->time_to_die
+		+ 5)
+		return (0);
+	return (1);
+}
+
 void	*monitor_thread(void *data)
 {
 	t_table		*tab;
@@ -38,24 +50,24 @@ void	*monitor_thread(void *data)
 	i = 0;
 	tab = (t_table *)data;
 	active_threads = 0;
-	while (active_threads < tab->philo_nbr)
+	while (active_threads < tab->philo_num)
 		active_threads = get_long(&tab->table_mutex, &tab->active_threads, tab);
 	while (!sim_finished(tab))
 	{
-		i = 0;
-		while (i < tab->philo_nbr && !sim_finished(tab))
+		i = -1;
+		while (++i < tab->philo_num && !sim_finished(tab))
 		{
 			current_time = get_time();
-			if (!tab->philos[i].full && current_time
-				- (uint64_t)tab->philos[i].last_meal_time > (uint64_t)tab->time_to_die
-				+ 5)
+			if (!tab->philos[i].full && !is_still_alive(tab, current_time, i))
 			{
 				write_status(&tab->philos[i], DIED);
 				set_bool(&tab->table_mutex, &tab->end_simulation, true, tab);
 				return (NULL);
 			}
-			i++;
 		}
 	}
 	return (NULL);
 }
+
+/*current_time
+	- (uint64_t)tab->philos[i].last_meal_time > (uint64_t)tab->time_to_die + 5*/

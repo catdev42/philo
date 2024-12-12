@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:29 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/04 03:06:30 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:17:09 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	handle_mutex_error(int status, int oper, t_table *table)
 	else if (status == EINVAL && oper == INIT)
 		error_exit("The value specified by attr is invalid.", 1, table);
 	else if (status == EDEADLK)
-		error_exit("A deadlock would occur if the thread blocked waiting for mutex",
+		error_exit("A deadlock would occur if thread blocked waiting for mutex",
 			1, table);
 	else if (status == EPERM)
 		error_exit("The current thread does not hold a lock on mut", 1, table);
@@ -44,7 +44,6 @@ void	handle_mutex_error(int status, int oper, t_table *table)
 
 void	safe_mutex_call(t_mtx *mutex, int operation, t_table *table)
 {
-
 	if (operation == LOCK)
 		handle_mutex_error(pthread_mutex_lock(mutex), operation, table);
 	else if (operation == UNLOCK)
@@ -74,8 +73,6 @@ void	handle_thread_error(int status, int oper, t_table *table)
 		error_exit("No thread could be found corresponding to thread ID.", 1,
 			table);
 	else if (status == EDEADLK)
-		error_exit("A deadlock was detected or the value of thread"
-					"specifies the calling thread",
-					1,
-					table);
+		error_exit("A deadlock was detected or the value of"
+			"thread specifies the calling thread", 1, table);
 }
