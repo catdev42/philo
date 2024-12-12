@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:54 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:24:16 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:54:35 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ int	main(int argc, char **argv)
 static int	is_still_alive(t_table *table, uint64_t current_time, int i)
 {
 	long	last_meal_time;
+	bool	is_full;
 
 	last_meal_time = get_long(&table->philos[i].philo_mutex,
 			&table->philos[i].last_meal_time, table);
-	if ((current_time - (uint64_t)last_meal_time) > (uint64_t)table->time_to_die
-		+ 5)
+	is_full = get_bool(&table->philos[i].philo_mutex, &table->philos[i].full,
+			table);
+	if (!is_full && (current_time
+			- (uint64_t)last_meal_time) > (uint64_t)table->time_to_die + 5)
 		return (0);
 	return (1);
 }
@@ -51,7 +54,10 @@ void	*monitor_thread(void *data)
 	tab = (t_table *)data;
 	active_threads = 0;
 	while (active_threads < tab->philo_num)
+	{
 		active_threads = get_long(&tab->table_mutex, &tab->active_threads, tab);
+		usleep(100);
+	}
 	while (!sim_finished(tab))
 	{
 		i = -1;

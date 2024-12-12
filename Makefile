@@ -4,8 +4,8 @@ OBJDIR		:= ./obj
 SRC		= clean_exit.c dinner.c main.c parse_init.c set_get.c utils_lib.c utils.c safe_fun.c
 OBJS	= $(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
-CC 		= gcc
-CFLAGS	= -Wall -Wextra -Werror -g3
+CC 		= cc
+CFLAGS	= -Wall -Wextra -Werror
 
 LDFLAGS = -pthread -fsanitize=thread
 
