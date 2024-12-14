@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 20:26:17 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/14 13:57:31 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 18:24:13 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ typedef struct s_philo
 	bool				full;
 	long				last_meal_time;
 	t_fork				*first_fork;
+	bool				first_fork_locked;
 	t_fork				*second_fork;
+	bool				second_fork_locked;
+
 	pthread_t			thread_id;
 	t_table				*table;
 	t_mtx				philo_mutex;

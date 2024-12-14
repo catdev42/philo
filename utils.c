@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:45 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/14 13:52:19 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 18:26:02 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	write_status(t_philo *philo, t_action action)
 	bool	is_full;
 
 	is_full = get_bool(&philo->philo_mutex, &philo->full, philo->table);
-	if (is_full)
+	if (is_full || sim_finished(philo->table))
 		return ;
 	elapsed = get_time() - philo->table->start_simulation;
 	safe_mutex_call(&philo->table->write_mutex, LOCK, philo->table);
@@ -64,8 +64,7 @@ void	write_status(t_philo *philo, t_action action)
 		if (action == TAKE_FIRST_FORK || action == TAKE_SECOND_FORK)
 			printf("%ld %i has taken a fork\n", elapsed, philo->id);
 		else if (action == EATING)
-			printf(BOLD_BLUE "%ld %i is eating\n" RESET, elapsed,
-				philo->id);
+			printf(BOLD_BLUE "%ld %i is eating\n" RESET, elapsed, philo->id);
 		else if (action == SLEEPING)
 			printf("%ld %i is sleeping\n", elapsed, philo->id);
 		else if (action == THINKING)
@@ -73,7 +72,8 @@ void	write_status(t_philo *philo, t_action action)
 		else if (action == DIED)
 			printf(BOLD_RED "%ld %i died\n", elapsed, philo->id);
 		else if (action == DEBUG)
-			printf(BOLD_RED "%ld %i SOMETHING IS WEIRD\n" RESET, elapsed, philo->id);
+			printf(BOLD_RED "%ld %i SOMETHING IS WEIRD\n" RESET, elapsed,
+				philo->id);
 	}
 	safe_mutex_call(&philo->table->write_mutex, UNLOCK, philo->table);
 }

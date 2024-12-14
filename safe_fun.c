@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:29 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:17:09 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 18:06:47 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_mutex_error(int status, int oper, t_table *table)
 	else if (status == ENOMEM)
 		error_exit("Mutex memory error.", 1, table);
 	else if (status == EBUSY)
-		error_exit("Mutex si locked.", 1, table);
+		error_exit("Mutex is locked.", 1, table);
 }
 
 void	safe_mutex_call(t_mtx *mutex, int operation, t_table *table)

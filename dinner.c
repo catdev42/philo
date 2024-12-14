@@ -6,43 +6,11 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:58 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/14 14:00:59 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 18:54:21 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/philo.h"
-
-/*
-valgrind --tool=helgrind --trace-children=yes ./philo 4 410 200 200
-
---log-file=helgrind.log
-*/
-
-void	dinner_start(t_table *table)
-{
-	int	i;
-
-	i = -1;
-	if (table->meals_limit_num == 0)
-		return ;
-	else
-		while (++i < table->philo_num)
-			handle_thread_error(pthread_create(&table->philos[i].thread_id,
-					NULL, dinner_each_philo, (void *)&table->philos[i]), CREATE,
-				table);
-	handle_thread_error(pthread_create(&table->monitor, NULL, monitor_thread,
-			(void *)table), CREATE, table);
-	table->start_simulation = get_time();
-	if (!table->start_simulation)
-		error_exit("Problem with gettimeofday()", 1, table);
-	set_bool(&table->table_mutex, &table->all_threads_ready, true, table);
-	i = -1;
-	while (++i < table->philo_num)
-		handle_thread_error(pthread_join(table->philos[i].thread_id, NULL),
-			JOIN, table);
-	set_bool(&table->table_mutex, &table->end_simulation, true, table);
-	handle_thread_error(pthread_join(table->monitor, NULL), JOIN, table);
-}
 
 /* THE PROGRAM OF EACH PHILOSOPHER*/
 void	*dinner_each_philo(void *data)
@@ -51,8 +19,6 @@ void	*dinner_each_philo(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
-	// while (!get_bool(&philo->table->table_mutex, &philo->table->all_threads_ready, philo->table))
-	// 	usleep(100);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
 		philo->table);
 	pthread_mutex_lock(&philo->table->table_mutex);
@@ -68,10 +34,26 @@ void	*dinner_each_philo(void *data)
 		if (philo->full)
 			return (NULL);
 		eat(philo);
-		philo_sleep(philo);
-		philo_think(philo);
+		if (!sim_finished(philo->table))
+			philo_sleep(philo);
+		if (!sim_finished(philo->table))
+			philo_think(philo);
 	}
 	return (NULL);
+}
+
+static int	pick_up_forks(t_philo *philo)
+{
+	safe_mutex_call(&philo->first_fork->fork, LOCK, philo->table);
+	write_status(philo, TAKE_FIRST_FORK);
+	if (sim_finished(philo->table))
+	{
+		safe_mutex_call(&philo->first_fork->fork, UNLOCK, philo->table);
+		return (0);
+	}
+	safe_mutex_call(&philo->second_fork->fork, LOCK, philo->table);
+	write_status(philo, TAKE_SECOND_FORK);
+	return (1);
 }
 
 void	eat(t_philo *philo)
@@ -84,10 +66,8 @@ void	eat(t_philo *philo)
 	}
 	else
 	{
-		safe_mutex_call(&philo->first_fork->fork, LOCK, philo->table);
-		write_status(philo, TAKE_FIRST_FORK);
-		safe_mutex_call(&philo->second_fork->fork, LOCK, philo->table);
-		write_status(philo, TAKE_SECOND_FORK);
+		if (!pick_up_forks(philo))
+			return ;
 		set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
 			philo->table);
 		write_status(philo, EATING);
@@ -111,3 +91,12 @@ void	philo_think(t_philo *philo)
 	write_status(philo, THINKING);
 	precise_usleep(philo->table->time_to_think, philo->table);
 }
+
+/*
+	pthread_mutex_lock(&philo->table->table_mutex);
+	philo->table->active_threads -= 1;
+	pthread_mutex_unlock(&philo->table->table_mutex);
+
+valgrind --tool=helgrind --trace-children=yes ./philo 4 410 200 200
+--log-file=helgrind.log
+*/

@@ -1,8 +1,0 @@
-initialize x number of forks as semaphores that can only be accessed by one process at a time
-
-initialize x number of philos processes that exit when they are full or if one dies
-
-problem:
-how can we have a struct thats a semaphore that all the threads can exit?
-orwe only need access to whether the dinner is finished no?
-so we can store that in a semaphore? 
