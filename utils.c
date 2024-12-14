@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:45 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:22:54 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 13:52:19 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,30 +46,34 @@ void	precise_usleep(long milsec_long, t_table *table)
 void	wait_all_threads(t_table *table)
 {
 	while (!get_bool(&table->table_mutex, &table->all_threads_ready, table))
-		usleep(100);
+		usleep(200);
 }
 
 void	write_status(t_philo *philo, t_action action)
 {
 	long	elapsed;
+	bool	is_full;
 
-	if (philo->full)
+	is_full = get_bool(&philo->philo_mutex, &philo->full, philo->table);
+	if (is_full)
 		return ;
 	elapsed = get_time() - philo->table->start_simulation;
 	safe_mutex_call(&philo->table->write_mutex, LOCK, philo->table);
 	if (!sim_finished(philo->table))
 	{
 		if (action == TAKE_FIRST_FORK || action == TAKE_SECOND_FORK)
-			printf("%ld Philo %i has taken a fork\n", elapsed, philo->id);
+			printf("%ld %i has taken a fork\n", elapsed, philo->id);
 		else if (action == EATING)
-			printf(BOLD_BLUE "%ld Philo %i is eating\n" RESET, elapsed,
+			printf(BOLD_BLUE "%ld %i is eating\n" RESET, elapsed,
 				philo->id);
 		else if (action == SLEEPING)
-			printf("%ld Philo %i is sleeping\n", elapsed, philo->id);
+			printf("%ld %i is sleeping\n", elapsed, philo->id);
 		else if (action == THINKING)
-			printf("%ld Philo %i is thinking\n", elapsed, philo->id);
+			printf("%ld %i is thinking\n", elapsed, philo->id);
 		else if (action == DIED)
-			printf(BOLD_RED "%ld Philo %i died\n", elapsed, philo->id);
+			printf(BOLD_RED "%ld %i died\n", elapsed, philo->id);
+		else if (action == DEBUG)
+			printf(BOLD_RED "%ld %i SOMETHING IS WEIRD\n" RESET, elapsed, philo->id);
 	}
 	safe_mutex_call(&philo->table->write_mutex, UNLOCK, philo->table);
 }

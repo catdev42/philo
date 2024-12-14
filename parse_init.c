@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:23 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:24:32 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 13:59:58 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,25 @@ int	parse_argv(t_table *table, char **argv)
 		|| table->time_to_die < 60 || table->time_to_eat < 60
 		|| table->time_to_sleep < 60)
 		error_exit("Wrong number input, please double check :)\n", 1, table);
+	table->time_to_think = get_ttt(table);
 	return (1);
+}
+
+long	get_ttt(t_table *table)
+{
+	long	think1;
+	long	think2;
+
+	think1 = 0;
+	think2 = 0;
+	if (table->philo_num % 2)
+	{
+		think1 = table->time_to_die - table->time_to_sleep - table->time_to_eat;
+		think2 = table->time_to_eat + 10;
+		if (think2 < think1)
+			think1 = think2;
+	}
+	return (think1);
 }
 
 int	data_init(t_table *table)

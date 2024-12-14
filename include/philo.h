@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 20:26:17 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:26:19 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 13:57:31 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ struct					s_table
 	long				time_to_die;
 	long				time_to_eat;
 	long				time_to_sleep;
+	long				time_to_think;
 	long				meals_limit_num;
 	long				start_simulation;
 	long				active_threads;
@@ -104,6 +105,7 @@ typedef enum e_action
 	TAKE_FIRST_FORK,
 	TAKE_SECOND_FORK,
 	DIED,
+	DEBUG,
 }						t_action;
 
 /*** MAIN ***/

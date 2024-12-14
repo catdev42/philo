@@ -6,11 +6,17 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:58 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 20:24:32 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:00:59 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/philo.h"
+
+/*
+valgrind --tool=helgrind --trace-children=yes ./philo 4 410 200 200
+
+--log-file=helgrind.log
+*/
 
 void	dinner_start(t_table *table)
 {
@@ -45,6 +51,8 @@ void	*dinner_each_philo(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
+	// while (!get_bool(&philo->table->table_mutex, &philo->table->all_threads_ready, philo->table))
+	// 	usleep(100);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(),
 		philo->table);
 	pthread_mutex_lock(&philo->table->table_mutex);
@@ -100,19 +108,6 @@ void	philo_sleep(t_philo *philo)
 
 void	philo_think(t_philo *philo)
 {
-	long	think1;
-	long	think2;
-
-	think1 = 0;
-	think2 = 0;
-	if (philo->table->philo_num % 2)
-	{
-		think1 = philo->table->time_to_die - philo->table->time_to_sleep
-			- philo->table->time_to_eat;
-		think2 = philo->table->time_to_eat + 30;
-		if (think2 < think1)
-			think1 = think2;
-	}
 	write_status(philo, THINKING);
-	precise_usleep(think1, philo->table);
+	precise_usleep(philo->table->time_to_think, philo->table);
 }

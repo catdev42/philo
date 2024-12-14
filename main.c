@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:54 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/12 21:54:35 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 13:47:10 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,14 @@ void	*monitor_thread(void *data)
 		while (++i < tab->philo_num && !sim_finished(tab))
 		{
 			current_time = get_time();
-			if (!tab->philos[i].full && !is_still_alive(tab, current_time, i))
+			if (!is_still_alive(tab, current_time, i))
 			{
 				write_status(&tab->philos[i], DIED);
 				set_bool(&tab->table_mutex, &tab->end_simulation, true, tab);
 				return (NULL);
 			}
 		}
+		// usleep(500); // CHANGED
 	}
 	return (NULL);
 }

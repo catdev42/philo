@@ -6,7 +6,7 @@
 /*   By: myakoven <myakoven@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 03:06:45 by myakoven          #+#    #+#             */
-/*   Updated: 2024/12/07 17:14:36 by myakoven         ###   ########.fr       */
+/*   Updated: 2024/12/14 13:49:03 by myakoven         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	write_status(t_philo *philo, t_action action)
 			printf("%ld Philo %i is thinking\n", elapsed, philo->id);
 		else if (action == DIED)
 			printf(BOLD_RED "%ld Philo %i died\n", elapsed, philo->id);
+
+
 	}
 	safe_mutex_call(&philo->table->write_mutex, UNLOCK, philo->table);
 }
